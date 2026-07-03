@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Escala de Triagem — AJ | 247ª Subseção OAB Santana de Parnaíba</title>
+<style>
+  :root{
+    --navy:#0b2545;
+    --navy-dark:#081a33;
+    --gold:#c9a24b;
+    --gold-soft:#e4cd8f;
+    --paper:#f7f6f2;
+    --line:#dcdcd4;
+    --text:#1c1c1c;
+    --muted:#6b6b64;
+    --today:#fff4e0;
+    --holiday:#a5342f;
+    --bridge:#3f7a5c;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background:var(--paper);
+    color:var(--text);
+    font-family:'Georgia','Times New Roman',serif;
+    line-height:1.5;
+  }
+  header{
+    background:linear-gradient(135deg,var(--navy) 0%,var(--navy-dark) 100%);
+    color:#fff;
+    padding:36px 24px 0;
+    border-bottom:4px solid var(--gold);
+  }
+  .header-inner{max-width:920px;margin:0 auto;padding-bottom:24px;}
+  .eyebrow{
+    font-family:Arial,Helvetica,sans-serif;
+    letter-spacing:.12em;
+    text-transform:uppercase;
+    font-size:12px;
+    color:var(--gold-soft);
+    margin-bottom:6px;
+  }
+  h1{margin:0 0 4px;font-size:28px;font-weight:700;}
+  .subtitulo{font-family:Arial,sans-serif;font-size:14px;color:#cbd6e6;}
+
+  /* Abas */
+  .abas{
+    max-width:920px;
+    margin:0 auto;
+    display:flex;
+    gap:4px;
+    padding:0 24px;
+  }
+  .aba-btn{
+    font-family:Arial,Helvetica,sans-serif;
+    font-size:14px;
+    font-weight:700;
+    letter-spacing:.02em;
+    background:rgba(255,255,255,.08);
+    color:#cbd6e6;
+    border:none;
+    border-bottom:3px solid transparent;
+    padding:12px 20px;
+    cursor:pointer;
+    border-radius:6px 6px 0 0;
+    transition:background .15s,color .15s;
+  }
+  .aba-btn:hover{background:rgba(255,255,255,.16);color:#fff;}
+  .aba-btn.ativa{
+    background:var(--paper);
+    color:var(--navy);
+    border-bottom-color:var(--gold);
+  }
+
+  main{max-width:920px;margin:0 auto;padding:28px 24px 60px;}
+  .painel{display:none;}
+  .painel.ativa{display:block;}
+
+  .aviso{
+    font-family:Arial,sans-serif;
+    font-size:13px;
+    background:#fff;
+    border:1px solid var(--line);
+    border-left:4px solid var(--gold);
+    padding:12px 16px;
+    margin-bottom:22px;
+    color:var(--muted);
+  }
+  .aviso.pendencia{border-left-color:var(--holiday);color:var(--holiday);font-weight:bold;}
+
+  table{
+    width:100%;
+    border-collapse:collapse;
+    background:#fff;
+    box-shadow:0 1px 3px rgba(0,0,0,.08);
+  }
+  thead th{
+    font-family:Arial,sans-serif;
+    font-size:12px;
+    letter-spacing:.08em;
+    text-transform:uppercase;
+    background:var(--navy);
+    color:#fff;
+    text-align:left;
+    padding:12px 14px;
+  }
+  tbody td{
+    padding:13px 14px;
+    border-bottom:1px solid var(--line);
+    font-size:15px;
+    vertical-align:top;
+  }
+  tbody tr.hoje{background:var(--today);}
+  tbody tr.hoje td:first-child{border-left:4px solid var(--gold);}
+  tbody tr.feriado td{color:var(--holiday);font-family:Arial,sans-serif;font-weight:bold;font-size:13px;}
+  tbody tr.ponte td{color:var(--bridge);font-family:Arial,sans-serif;font-weight:bold;font-size:13px;}
+  .data{white-space:nowrap;font-weight:700;color:var(--navy);width:70px;}
+  .dia-semana{
+    font-family:Arial,sans-serif;
+    font-size:11px;
+    color:var(--muted);
+    text-transform:uppercase;
+    display:block;
+    margin-top:2px;
+    font-weight:normal;
+  }
+  .advogados{font-size:14.5px;}
+  .lista-advogados{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px;}
+  .linha-advogado{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:10px;
+    flex-wrap:wrap;
+  }
+  .nome-advogado{font-size:14.5px;}
+  .btn-copiar{
+    font-family:Arial,sans-serif;
+    font-size:12px;
+    background:var(--navy);
+    color:#fff;
+    border:none;
+    padding:6px 11px;
+    border-radius:3px;
+    cursor:pointer;
+    white-space:nowrap;
+    flex-shrink:0;
+  }
+  .btn-copiar:hover{background:var(--gold);color:var(--navy-dark);}
+  .btn-copiar:active{transform:scale(.97);}
+  .copiado{background:var(--bridge) !important;color:#fff !important;}
+  footer{
+    font-family:Arial,sans-serif;
+    font-size:12px;
+    color:var(--muted);
+    text-align:center;
+    padding:24px;
+    border-top:1px solid var(--line);
+  }
+  .legenda{
+    font-family:Arial,sans-serif;
+    font-size:12px;
+    color:var(--muted);
+    margin:16px 0 4px;
+    display:flex;
+    gap:18px;
+    flex-wrap:wrap;
+  }
+  .legenda span{display:flex;align-items:center;gap:6px;}
+  .dot{width:10px;height:10px;border-radius:50%;display:inline-block;}
+  @media (max-width:640px){
+    thead{display:none;}
+    tbody tr{display:block;border-bottom:8px solid var(--paper);}
+    tbody td{display:block;border-bottom:none;padding:6px 14px;}
+    tbody td:first-child{padding-top:14px;}
+    tbody td:last-child{padding-bottom:14px;}
+    .linha-advogado{justify-content:space-between;}
+    .btn-copiar{width:auto;}
+    .abas{padding:0 12px;}
+    .aba-btn{padding:10px 14px;font-size:13px;}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <div class="eyebrow">Assistência Judiciária Gratuita — Convênio nº 001/2026 DPE-SP/OAB-SP</div>
+    <h1>Escala de Triagem — Julho 2026</h1>
+    <div class="subtitulo">247ª Subseção OAB Santana de Parnaíba</div>
+  </div>
+  <div class="abas">
+    <button class="aba-btn ativa" id="tab-btn-santana" onclick="mudarAba('santana')">Santana de Parnaíba</button>
+    <button class="aba-btn" id="tab-btn-pirapora" onclick="mudarAba('pirapora')">Pirapora do Bom Jesus</button>
+  </div>
+</header>
+
+<main>
+
+  <!-- ===================== PAINEL: SANTANA DE PARNAÍBA ===================== -->
+  <section id="painel-santana" class="painel ativa">
+    <div class="aviso">
+      ℹ️ Clique em <strong>"Copiar lembrete"</strong> ao lado de cada dupla para gerar o texto de aviso pronto para enviar por e-mail ou WhatsApp. Atualize a lista de advogados no início do script a cada mês.
+    </div>
+
+    <div class="legenda">
+      <span><span class="dot" style="background:var(--gold);"></span> Data de hoje</span>
+      <span><span class="dot" style="background:var(--holiday);"></span> Feriado</span>
+      <span><span class="dot" style="background:var(--bridge);"></span> Ponte de feriado</span>
+    </div>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Data</th>
+          <th>Advogados(as) escalados(as)</th>
+        </tr>
+      </thead>
+      <tbody id="corpo-escala-santana"></tbody>
+    </table>
+  </section>
+
+  <!-- ===================== PAINEL: PIRAPORA DO BOM JESUS ===================== -->
+  <section id="painel-pirapora" class="painel">
+    <div class="aviso">
+      📍 Local de triagem: R. Bom Jesus, 106 - Centro, Pirapora do Bom Jesus - SP, 06550-000
+    </div>
+
+    <div class="legenda">
+      <span><span class="dot" style="background:var(--gold);"></span> Data de hoje</span>
+      <span><span class="dot" style="background:var(--holiday);"></span> Feriado</span>
+    </div>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Data</th>
+          <th>Advogado(a) escalado(a)</th>
+        </tr>
+      </thead>
+      <tbody id="corpo-escala-pirapora"></tbody>
+    </table>
+  </section>
+
+</main>
+
+<footer>
+  Rua Alberto Frediani, 770 – Jardim Frediani – CEP 06502-155 – Santana de Parnaíba-SP<br>
+  Tel.: (11) 4154-1371 / (11) 4154-4228 – E-mail: aj.santana.parnaiba@oabsp.org.br
+</footer>
+
+<script>
+/* ============================================================
+   NAVEGAÇÃO ENTRE ABAS
+   ============================================================ */
+function mudarAba(aba){
+  document.getElementById('painel-santana').classList.toggle('ativa', aba === 'santana');
+  document.getElementById('painel-pirapora').classList.toggle('ativa', aba === 'pirapora');
+  document.getElementById('tab-btn-santana').classList.toggle('ativa', aba === 'santana');
+  document.getElementById('tab-btn-pirapora').classList.toggle('ativa', aba === 'pirapora');
+  try{ localStorage.setItem('aj-aba-ativa', aba); }catch(e){}
+}
+
+/* ============================================================
+   FUNÇÕES AUXILIARES COMUNS
+   ============================================================ */
+function formatarDataExibicao(iso){
+  const [ano,mes,dia] = iso.split("-");
+  return `${dia}/${mes}`;
+}
+
+function hojeISO(){
+  const d = new Date();
+  const ano = d.getFullYear();
+  const mes = String(d.getMonth()+1).padStart(2,"0");
+  const dia = String(d.getDate()).padStart(2,"0");
+  return `${ano}-${mes}-${dia}`;
+}
+
+function copiarTexto(texto, btn){
+  navigator.clipboard.writeText(texto).then(() => {
+    btn.textContent = "Copiado ✓";
+    btn.classList.add("copiado");
+    setTimeout(() => {
+      btn.textContent = "Copiar lembrete";
+      btn.classList.remove("copiado");
+    }, 1800);
+  }).catch(() => {
+    alert("Não foi possível copiar automaticamente. Texto:\n\n" + texto);
+  });
+}
+
+/* ============================================================
+   SANTANA DE PARNAÍBA — ATUALIZAÇÃO MENSAL
+   tipo: "normal" | "feriado" | "ponte"
+   advogados: null quando for feriado/ponte
+   ============================================================ */
+const ESCALA_SANTANA = [
+  { data:"2026-07-01", diaSemana:"Quarta-feira", tipo:"normal", advogados:["Vinícius Coevas Castilho","Alessandra da Silva"] },
+  { data:"2026-07-02", diaSemana:"Quinta-feira", tipo:"normal", advogados:["Alexsandro Marins Moraes","Ana Flávia Leandra Silveira"] },
+  { data:"2026-07-03", diaSemana:"Sexta-feira",  tipo:"normal", advogados:["Ana Paula Comin Lodeiro Bianchini D'Emilio","Andréa Ramos"] },
+  { data:"2026-07-06", diaSemana:"Segunda-feira",tipo:"normal", advogados:["Anna Luiza Tozzi de Almeida Villela Rimola","Anny Yoo Mi Chae"] },
+  { data:"2026-07-07", diaSemana:"Terça-feira",  tipo:"normal", advogados:["Beatriz Barbosa Pereira","Beatriz Ravanhani de Souza"] },
+  { data:"2026-07-08", diaSemana:"Quarta-feira", tipo:"normal", advogados:["Bruna Mendes Casagrande","Carla Benedicto Souza"] },
+  { data:"2026-07-09", diaSemana:"Quinta-feira", tipo:"feriado", advogados:null, texto:"Feriado — Revolução Constitucionalista de 1932" },
+  { data:"2026-07-10", diaSemana:"Sexta-feira",  tipo:"ponte", advogados:null, texto:"Ponte de feriado — Revolução Constitucionalista de 1932" },
+  { data:"2026-07-13", diaSemana:"Segunda-feira",tipo:"normal", advogados:["Carlos Eduardo Correa Duarte","Caroline Michele Schmitt"] },
+  { data:"2026-07-14", diaSemana:"Terça-feira",  tipo:"normal", advogados:["Claudia Paciulli Azevedo Parise","Claudia Regina de Oliveira"] },
+  { data:"2026-07-15", diaSemana:"Quarta-feira", tipo:"normal", advogados:["Daniel Ambrosio da Silva Junior","Diego Martins Alves"] },
+  { data:"2026-07-16", diaSemana:"Quinta-feira", tipo:"normal", advogados:["Doraci da Silva Sobral","Ednea da Silva"] },
+  { data:"2026-07-17", diaSemana:"Sexta-feira",  tipo:"normal", advogados:["Edson Almeida da Mota","Elcio Carlos Almeida Ferreira"] },
+  { data:"2026-07-20", diaSemana:"Segunda-feira",tipo:"normal", advogados:["Elise Ramounoulou Madella","Evelyn Carina de Oliveira Nunes"] },
+  { data:"2026-07-21", diaSemana:"Terça-feira",  tipo:"normal", advogados:["Flávia Carmo Ferreira","Gabriela de Camargo Prado"] },
+  { data:"2026-07-22", diaSemana:"Quarta-feira", tipo:"normal", advogados:["Gustavo Orlando Costa","Helen Santos Oliveira"] },
+  { data:"2026-07-23", diaSemana:"Quinta-feira", tipo:"normal", advogados:["Iara Silvia Mainardi Koga","Isabel Maria dos Santos Bispo"] },
+  { data:"2026-07-24", diaSemana:"Sexta-feira",  tipo:"normal", advogados:["Isabella Xavier Lobo","Jane Couto Insfran de Oliveira — OAB/SP 328.202"] },
+  { data:"2026-07-27", diaSemana:"Segunda-feira",tipo:"normal", advogados:["Jaqueline da Silva Machado","João Marco Teixeira de Souza Braga"] },
+  { data:"2026-07-28", diaSemana:"Terça-feira",  tipo:"normal", advogados:["Kenia Joyce Rosario da Silva","Leonardo Luis Dias"] },
+  { data:"2026-07-29", diaSemana:"Quarta-feira", tipo:"normal", advogados:["Lilian Joia Ferraro","Luana Gonçalves Sousa de Carvalho"] },
+  { data:"2026-07-30", diaSemana:"Quinta-feira", tipo:"normal", advogados:["Luciana Maria Fuzer","Luis Gustavo Cigana Crivellaro"] },
+  { data:"2026-07-31", diaSemana:"Sexta-feira",  tipo:"normal", advogados:["Luiz Carlos Sarra","Marco Antonio de Carvalho Santos"] },
+];
+
+function montarTextoLembreteSantana(item, nomeAdvogado){
+  const [ano,mes,dia] = item.data.split("-");
+  return `Prezado(a) Dr(a). ${nomeAdvogado},
+
+Gostaríamos de lembrá-lo(a) de que a triagem para os atendimentos da Assistência Judiciária Gratuita ocorrerá em ${dia}/${mes}/${ano} (${item.diaSemana}), no Poupatempo, no seguinte endereço:
+
+📍 Avenida Tenente Marques, 5297 — Jardim do Luar (Fazendinha), Santana de Parnaíba
+
+Agradecemos, desde já, a sua valiosa colaboração e pedimos a gentileza de comparecer no horário agendado, de modo a garantir um atendimento ágil e eficiente à população assistida.
+
+Permanecemos à disposição para quaisquer dúvidas ou esclarecimentos adicionais.
+
+Atenciosamente,
+Assistência Judiciária — 247ª Subseção OAB Santana de Parnaíba
+Tel.: (11) 4154-1371 / (11) 4154-4228
+E-mail: aj.santana.parnaiba@oabsp.org.br`;
+}
+
+function renderizarSantana(){
+  const corpo = document.getElementById("corpo-escala-santana");
+  const hoje = hojeISO();
+  corpo.innerHTML = "";
+
+  ESCALA_SANTANA.forEach(item => {
+    const tr = document.createElement("tr");
+    if(item.data === hoje) tr.classList.add("hoje");
+    if(item.tipo === "feriado") tr.classList.add("feriado");
+    if(item.tipo === "ponte") tr.classList.add("ponte");
+
+    const tdData = document.createElement("td");
+    tdData.className = "data";
+    tdData.innerHTML = `${formatarDataExibicao(item.data)}<span class="dia-semana">${item.diaSemana}</span>`;
+    tr.appendChild(tdData);
+
+    const tdConteudo = document.createElement("td");
+    tdConteudo.className = "advogados";
+
+    if(item.tipo === "normal"){
+      const lista = document.createElement("div");
+      lista.className = "lista-advogados";
+
+      item.advogados.forEach(nome => {
+        const linha = document.createElement("div");
+        linha.className = "linha-advogado";
+
+        const spanNome = document.createElement("span");
+        spanNome.className = "nome-advogado";
+        spanNome.textContent = nome;
+        linha.appendChild(spanNome);
+
+        const btn = document.createElement("button");
+        btn.className = "btn-copiar";
+        btn.textContent = "Copiar lembrete";
+        btn.onclick = () => copiarTexto(montarTextoLembreteSantana(item, nome), btn);
+        linha.appendChild(btn);
+
+        lista.appendChild(linha);
+      });
+
+      tdConteudo.appendChild(lista);
+    } else {
+      tdConteudo.textContent = item.texto;
+    }
+    tr.appendChild(tdConteudo);
+
+    corpo.appendChild(tr);
+  });
+}
+
+/* ============================================================
+   PIRAPORA DO BOM JESUS — ATUALIZAÇÃO MENSAL
+   tipo: "normal" | "feriado"
+   advogado: null quando for feriado
+   ============================================================ */
+const ENDERECO_TRIAGEM_PIRAPORA = "R. Bom Jesus, 106 - Centro, Pirapora do Bom Jesus - SP, 06550-000";
+
+const ESCALA_PIRAPORA = [
+  { data:"2026-07-03", diaSemana:"Sexta-feira", tipo:"normal", advogado:"Bruna Mendes Casagrande" },
+  { data:"2026-07-10", diaSemana:"Sexta-feira", tipo:"feriado", advogado:null, texto:"Feriado — Revolução Constitucionalista de 1932" },
+  { data:"2026-07-17", diaSemana:"Sexta-feira", tipo:"normal", advogado:"Carla Benedicto Souza" },
+  { data:"2026-07-24", diaSemana:"Sexta-feira", tipo:"normal", advogado:"Carlos Eduardo Correa Duarte" },
+  { data:"2026-07-31", diaSemana:"Sexta-feira", tipo:"normal", advogado:"Caroline Michele Schmitt" },
+];
+
+function montarTextoLembretePirapora(item){
+  const [ano,mes,dia] = item.data.split("-");
+  return `Prezado(a) Dr(a). ${item.advogado},
+
+Gostaríamos de lembrá-lo(a) de que a triagem para os atendimentos da Assistência Judiciária Gratuita em Pirapora do Bom Jesus ocorrerá em ${dia}/${mes}/${ano} (${item.diaSemana}), no seguinte endereço:
+
+📍 ${ENDERECO_TRIAGEM_PIRAPORA}
+
+Agradecemos, desde já, a sua valiosa colaboração e pedimos a gentileza de comparecer no horário agendado, de modo a garantir um atendimento ágil e eficiente à população assistida.
+
+Permanecemos à disposição para quaisquer dúvidas ou esclarecimentos adicionais.
+
+Atenciosamente,
+Assistência Judiciária — 247ª Subseção OAB Santana de Parnaíba
+Tel.: (11) 4154-1371 / (11) 4154-4228
+E-mail: aj.santana.parnaiba@oabsp.org.br`;
+}
+
+function renderizarPirapora(){
+  const corpo = document.getElementById("corpo-escala-pirapora");
+  const hoje = hojeISO();
+  corpo.innerHTML = "";
+
+  ESCALA_PIRAPORA.forEach(item => {
+    const tr = document.createElement("tr");
+    if(item.data === hoje) tr.classList.add("hoje");
+    if(item.tipo === "feriado") tr.classList.add("feriado");
+
+    const tdData = document.createElement("td");
+    tdData.className = "data";
+    tdData.innerHTML = `${formatarDataExibicao(item.data)}<span class="dia-semana">${item.diaSemana}</span>`;
+    tr.appendChild(tdData);
+
+    const tdConteudo = document.createElement("td");
+    if(item.tipo === "normal"){
+      const linha = document.createElement("div");
+      linha.className = "linha-advogado";
+
+      const spanNome = document.createElement("span");
+      spanNome.className = "nome-advogado";
+      spanNome.textContent = item.advogado;
+      linha.appendChild(spanNome);
+
+      const btn = document.createElement("button");
+      btn.className = "btn-copiar";
+      btn.textContent = "Copiar lembrete";
+      btn.onclick = () => copiarTexto(montarTextoLembretePirapora(item), btn);
+      linha.appendChild(btn);
+
+      tdConteudo.appendChild(linha);
+    } else {
+      tdConteudo.textContent = item.texto;
+    }
+    tr.appendChild(tdConteudo);
+
+    corpo.appendChild(tr);
+  });
+}
+
+/* ============================================================
+   INICIALIZAÇÃO
+   ============================================================ */
+renderizarSantana();
+renderizarPirapora();
+
+// Restaura a última aba visitada (se houver)
+try{
+  const abaSalva = localStorage.getItem('aj-aba-ativa');
+  if(abaSalva === 'pirapora') mudarAba('pirapora');
+}catch(e){}
+</script>
+
+</body>
+</html>
